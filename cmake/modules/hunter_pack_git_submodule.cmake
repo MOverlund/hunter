@@ -119,13 +119,16 @@ function(hunter_pack_git_submodule)
     )
   endif()
 
-  # NOTE: EXISTS check below was failing without prefixing the submodule_dir
-  set(head_file "${submodule_dir}/${output}")
-  #set(head_file "${output}")
+  set(head_file "${output}")
+  if(NOT EXISTS "${head_file}")
+    # NOTE: EXISTS check below was failing without prefixing the submodule_dir
+    set(head_file "${submodule_dir}/${output}")
+  endif()
 
   if(NOT EXISTS "${head_file}")
     hunter_internal_error("File not found: '${head_file}'")
   endif()
+  
   set_property(
     DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${head_file}"
   )
@@ -165,9 +168,11 @@ function(hunter_pack_git_submodule)
     )
   endif()
 
-  # NOTE: EXISTS check below was failing without prefixing the submodule_dir
-  set(ref_file "${submodule_dir}/${output}")
-  #set(ref_file "${output}")
+  set(ref_file "${output}")
+  if(NOT EXISTS "${ref_file}")
+    # NOTE: EXISTS check below was failing without prefixing the submodule_dir
+    set(ref_file "${submodule_dir}/${output}")
+  endif()
 
   if(NOT EXISTS "${ref_file}")
     hunter_internal_error("File not found: ${ref_file}")
